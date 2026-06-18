@@ -109,14 +109,16 @@ public class UIManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Starts the game from Level1, resetting score if a GameManager already exists.
+    /// Starts the game from Level1, resetting score, lives, level, and win flag.
     /// </summary>
     private void OnPlayButton()
     {
         if (GameManager.Instance != null)
         {
             GameManager.Instance.score = 0;
+            GameManager.Instance.lives = 3;
             GameManager.Instance.currentLevel = 1;
+            GameManager.Instance.hasWon = false;
         }
 
         SceneManager.LoadScene(Level1Scene);

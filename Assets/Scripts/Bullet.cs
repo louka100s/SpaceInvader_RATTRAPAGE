@@ -32,6 +32,28 @@ public class Bullet : MonoBehaviour
     {
         if (other.CompareTag("Enemy"))
         {
+            KillFlash.Spawn(other.transform.position);
+
+            Boss bossScript = other.GetComponent<Boss>();
+            if (bossScript != null)
+            {
+                bossScript.TakeDamage();
+                Destroy(gameObject);
+
+                if (GameManager.Instance != null)
+                {
+                    GameManager.Instance.AddScore(1);
+                }
+
+                if (ComboManager.Instance != null)
+                {
+                    ComboManager.Instance.RegisterKill();
+                }
+
+                ScorePopup.Spawn(other.transform.position, 1);
+                return;
+            }
+
             Enemy enemyScript = other.GetComponent<Enemy>();
             if (enemyScript != null)
             {
@@ -53,9 +75,14 @@ public class Bullet : MonoBehaviour
             {
                 ComboManager.Instance.RegisterKill();
             }
+
+            ScorePopup.Spawn(other.transform.position, 1);
         }
         else if (other.CompareTag("UFO"))
         {
+            KillFlash.Spawn(other.transform.position);
+            ScorePopup.Spawn(other.transform.position, 50);
+
             Destroy(other.gameObject);
             Destroy(gameObject);
 

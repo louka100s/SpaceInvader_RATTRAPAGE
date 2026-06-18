@@ -9,12 +9,13 @@ public class BarkTrigger : MonoBehaviour
     private bool fewEnemiesTriggered = false;
     private bool halfEnemiesTriggered = false;
     private bool firstLifeLostTriggered = false;
-    private bool firstTankHitTriggered = false;
     private bool firstDiverTriggered = false;
     private bool firstDiverKilledTriggered = false;
     private bool playerReassureTriggered = false;
     private bool commanderRecoverTriggered = false;
     private bool ufoTriggered = false;
+    private bool bossHalfTriggered = false;
+    private bool bossLowTriggered = false;
 
     private int lastScore = 0;
     private int lastLives = 3;
@@ -62,6 +63,12 @@ public class BarkTrigger : MonoBehaviour
             BarkManager.Instance.ShowBark("C'est pas possible... C'est la guerre des mondes là...", 3f);
             yield return new WaitForSeconds(4f);
             BarkManager.Instance.ShowBark("Ils sont kamikazes en plus ?! On va tous y passer !", 3f);
+        }
+        else if (currentLevel == 5)
+        {
+            BarkManager.Instance.ShowBark("C'est leur chef... Un contre un, soldat.", 3f);
+            yield return new WaitForSeconds(4f);
+            BarkManager.Instance.ShowBark("Visez entre les boucliers. Timing is everything.", 3f);
         }
     }
 
@@ -138,6 +145,28 @@ public class BarkTrigger : MonoBehaviour
             {
                 ufoTriggered = true;
                 BarkManager.Instance.ShowBark("Contact radar inconnu ! Abattez-le pour un gros bonus !", 3f);
+            }
+        }
+
+        // --- DÉTECTION : Boss HP ---
+        if (currentLevel == 5)
+        {
+            Boss boss = Object.FindFirstObjectByType<Boss>();
+            if (boss != null)
+            {
+                float hpRatio = (float)boss.currentHealth / boss.maxHealth;
+
+                if (!bossHalfTriggered && hpRatio <= 0.5f)
+                {
+                    bossHalfTriggered = true;
+                    BarkManager.Instance.ShowBark("Il faiblit ! Continuez le pilonnage !", 2.5f);
+                }
+
+                if (!bossLowTriggered && hpRatio <= 0.2f)
+                {
+                    bossLowTriggered = true;
+                    BarkManager.Instance.ShowBark("IL EST PRESQUE FINI ! ACHEVEZ-LE !", 2.5f);
+                }
             }
         }
 

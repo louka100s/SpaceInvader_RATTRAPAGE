@@ -51,6 +51,20 @@ public class Enemy : MonoBehaviour
         health--;
         if (health <= 0)
         {
+            if (Random.value <= 0.08f)
+            {
+                GameObject pickup = GameObject.CreatePrimitive(PrimitiveType.Cube);
+                pickup.name = "SpeedPickup";
+                pickup.transform.position = transform.position;
+                pickup.transform.localScale = new Vector3(0.4f, 0.4f, 0.4f);
+                pickup.GetComponent<Renderer>().material.color = Color.yellow;
+                pickup.GetComponent<BoxCollider>().isTrigger = true;
+                Rigidbody rb = pickup.AddComponent<Rigidbody>();
+                rb.useGravity = false;
+                rb.isKinematic = true;
+                pickup.AddComponent<SpeedPickup>();
+            }
+
             Destroy(gameObject);
         }
         else

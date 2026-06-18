@@ -30,6 +30,13 @@ public class EnemyGrid : MonoBehaviour
 
     private void Start()
     {
+        // Sync GameManager avec le niveau de cette scène pour robustesse
+        // (évite le bug si la scène est lancée directement depuis l'éditeur)
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.currentLevel = currentLevel;
+        }
+
         SpawnGrid();
         totalEnemies = transform.childCount;
         baseSpeed = moveSpeed;
@@ -162,6 +169,21 @@ public class EnemyGrid : MonoBehaviour
         {
             float ratio = 1f - ((float)remainingEnemies / totalEnemies);
             moveSpeed = baseSpeed + (ratio * baseSpeed * 3f);
+        }
+
+        // 3b. Danger Flash — clignotement rouge quand il reste 5 ennemis ou moins
+        if (remainingEnemies > 0 && remainingEnemies <= 5)
+        {
+            float blink = Mathf.PingPong(Time.time * 4f, 1f);
+            foreach (Transform child in transform)
+            {
+                Renderer r = child.GetComponent<Renderer>();
+                if (r != null)
+                {
+                    Color original = r.material.color;
+                    r.material.color = Color.Lerp(original, Color.red, blink);
+                }
+            }
         }
 
         // 4. Mouvement horizontal

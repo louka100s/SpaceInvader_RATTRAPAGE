@@ -115,6 +115,22 @@ public class PlayerController : MonoBehaviour
     }
 
     /// <summary>
+    /// Temporarily halves the fire cooldown for 5 seconds, allowing twice the fire rate.
+    /// </summary>
+    public void ActivateSpeedBoost()
+    {
+        StartCoroutine(SpeedBoostCoroutine());
+    }
+
+    private IEnumerator SpeedBoostCoroutine()
+    {
+        float originalCooldown = fireCooldown;
+        fireCooldown = originalCooldown * 0.5f;
+        yield return new WaitForSeconds(5f);
+        fireCooldown = originalCooldown;
+    }
+
+    /// <summary>
     /// Blinks the player renderer for InvincibilityDuration seconds, then
     /// re-enables it and clears the invincibility flag.
     /// </summary>

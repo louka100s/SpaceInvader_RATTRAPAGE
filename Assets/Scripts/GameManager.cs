@@ -34,6 +34,7 @@ public class GameManager : MonoBehaviour
     private const string Level2Scene = "Level2";
     private const string Level3Scene = "Level3";
     private const string Level4Scene = "Level4";
+    private const string Level5Scene = "Level5";
     private const string GameOverScene = "GameOver";
 
     private void Awake()
@@ -123,6 +124,10 @@ public class GameManager : MonoBehaviour
         {
             SceneManager.LoadScene(Level4Scene);
         }
+        else if (currentLevel == 5)
+        {
+            SceneManager.LoadScene(Level5Scene);
+        }
         else
         {
             hasWon = true;
@@ -132,13 +137,14 @@ public class GameManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Resets score, lives, and level then restarts from Level1.
+    /// Resets score, lives, level, and win flag then restarts from Level1.
     /// </summary>
     public void RestartGame()
     {
         score = 0;
         lives = 3;
         currentLevel = 1;
+        hasWon = false;
         SceneManager.LoadScene(Level1Scene);
     }
 }
